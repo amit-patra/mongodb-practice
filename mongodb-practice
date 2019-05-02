@@ -1,0 +1,48 @@
+//Database
+use user
+// Create collection with fields
+db.employee.insert(
+{name:"Amit Patra", Role:"Engineer", Address:"Bengaluru", Salary:10000, Experience:2},
+{name:"Asit Roy", Role:"Networking", Address:"Chennai", Salary:30000, Experience:3},
+{name:"Rumpa Das", Role:"Designer", Address:"Bengaluru", Salary:20000, Experience:5},
+{name:"Dipa Das", Role:"HR", Address:"Hydrabad", Salary:15000, Experience:1},
+{name:"Amit Mitra", Role:"Engineer", Address:"Bengaluru", Salary:17000, Experience:2},
+{name:"Test", Role:"Engineer", Address:"Bengaluru", Salary:25000, Experience:4}
+)
+db.employee.insert({name:"Test", Role:"Engineer", Address:"Bengaluru", Salary:25000, Experience:4})
+//All List
+	db.employee.find()
+//Find first two list
+	db.employee.find().limit(2)
+//Select particular fields
+	db.employee.find({}, {name:1,Role:1})
+//Highest salary
+	db.employee.aggregate([{$group: {_id:null, max:{$max:"$Salary"}}}])
+	db.employee.find().sort({Salary:-1}).limit(1)
+//Lowest Salary
+	db.employee.find().sort({Salary:1}).limit(1)
+	db.employee.aggregate([{$group: {_id:null, min:{$min:"$Salary"}}}])
+//Second Highest Salary
+	db.employee.find().sort({Salary:-1}).skip(1).limit(1)
+//Second Lowest Salary
+	db.employee.find().sort({Salary:1}).skip(1).limit(1)
+//Average Salary
+	db.employee.aggregate([{$group: {_id:null, avg:{$avg:"$Salary"}}}])
+//Name start with "Am"
+	db.employee.find( {name: {$regex:/Am/} })
+//Name is any where is "a"
+	db.employee.find( {name: {$regex:/a/i} })
+//List who are the engineer
+	db.employee.find({Role:{$regex:"Engineer"}})
+//Who are the not engineer
+	db.employee.find({Role:{$ne:"Engineer"}})
+//Salary more than 15,000
+	db.employee.find({Salary:{$gt:15000}})
+//Experience not 2 years
+	db.employee.find({Experience:{$ne:2}})
+// Update Rumpa to Disha
+db.employee.update({name:"Rumpa Das"}, {$set:{name:"Disha Das"}})
+//Remove field whose name is "Test"
+db.employee.remove({name:{$eq:"Test"}})
+//* Single Remove
+db.employee.remove({name:{$eq:"Test"}},true)
